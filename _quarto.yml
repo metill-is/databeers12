@@ -1,4 +1,6 @@
 project:
-  title: "databeers12"
+  output-dir: docs
+  preview:
+    port: 4200
 
 
