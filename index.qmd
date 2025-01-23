@@ -6,7 +6,6 @@ author:
 format: 
   revealjs:
     theme: theme.scss
-    footer: "[metill.is/databeers12](https://metill.is/databeers12)"
     simplemenu:
       flat: false
       barhtml:
