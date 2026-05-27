@@ -1,0 +1,174 @@
+---
+title: "Two Linear Models Walk Into a Bar"
+subtitle: "A Classical Approach to Election Forecasting"
+author:
+  - name: Brynjólfur Gauti Guðrúnar Jónsson
+format: 
+  revealjs:
+    theme: theme.scss
+    simplemenu:
+      flat: false
+      barhtml:
+        header: "<div class='menubar mb-10'><ul class='menu'></ul><div>"
+        footer: "<div class='footer footer-default' style='display: block;'> <a href='https://metill.is/databeers12' target='_blank'>metill.is/databeers12</a></div>"
+html-math-method:
+  method: mathjax
+  url: "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+revealjs-plugins:
+  - simplemenu
+---
+
+## About the Team {data-name="Intro"}
+
+
+![](Figures/agnar.jpg){width="24%" fig-align="center"}
+![](Figures/hafsteinnbinni.jpg){width="42.8%" fig-align="center"}
+![](Figures/rafael.jpg){width="24%" fig-align="center"}
+
+[*Left to right: Agnar Freyr Helgason, Hafsteinn Einarsson, Binni, Rafael Daniel Vias*]{.team-caption}
+
+## Challenges
+
+- Pre-election polls often diverge from actual election results
+    - Time between poll and election ("lead") affects accuracy
+    - Even final polls show error beyond sampling variation
+- Adjusting for "industry effects"
+    - Polling errors are consistent across multiple elections
+    - Systematic biases affect specific parties similarly across polling houses
+
+## Challenges
+
+![](Figures/xd_error.png){fig-align="center"}
+
+## The Model {data-name="Model"}
+
+1. **Dynamic Linear Model**
+    - Tracks party support over time
+    - Accounts for house effects
+    - Handles increased volatility close to elections
+2. **Fundamentals Model**
+    - Historical election results
+    - Economic indicators
+    - Incumbency effects
+
+## Dynamic Linear Model
+
+$$
+\text{Poll Results} \sim \text{Distribution}(\text{Support} + \text{Bias})
+$$
+
+where Support follows:
+
+$$
+\text{Support}_\text{now} = \text{Support}_\text{last poll} + \text{Change}
+$$
+
+with:
+
+- Bigger random changes allowed after government split
+- Related parties tend to move together
+- Allowed amount of change scales with time between polls
+
+## Reverse Time Series
+
+- Time series usually start with an unknown initial state
+
+$$
+\begin{gathered}
+\text{Support}_t = \text{Support}_{t - 1} + \text{Change} \\
+\text{Support}_0 \sim \text{Distribution}(\theta)
+\end{gathered}
+$$
+
+- We flips this and write
+
+$$
+\begin{gathered}
+\text{Support}_t = \text{Support}_{t + 1} + \text{Change} \\
+\text{Support}_T \sim \text{Distribution}(\theta)
+\end{gathered}
+$$
+
+- But what should $\theta$ be? 🤔
+
+## Fundamentals Model
+
+- How would we predict election results months ahead?
+
+![](Figures/fundamentals.jpeg){fig-align="center"}
+
+## Fundamentals as Prior
+
+- Election day support depends on:
+    - Previous election results
+    - Years in government
+    - Economic growth
+    - Inflation
+
+- This gives us an informed prior:
+$$
+\begin{gathered}
+\text{Support}_T \sim \text{Normal}(\text{Fundamentals}, \text{Variance})
+\end{gathered}
+$$
+
+## Fundamentals Weight
+
+![](Figures/fundamentals_weight_1month.png){fig-align="center"}
+
+## Fundamentals Weight
+
+![](Figures/fundamentals_weight_1week.png){fig-align="center"}
+
+
+## Visualization {data-name="Results"}
+
+![](Figures/2024-11-29.png){fig-align="center"}
+
+## Seats
+
+![](Figures/2024-11-29_seats.png){fig-align="center"}
+
+## Majorities
+
+![](Figures/2024-11-29_majority_seats.png){fig-align="center"}
+
+## How did we do?
+
+![](Figures/time_series_transparent.png){fig-align="center"}
+
+## How did we do?
+
+![](Figures/fravik_flokkar2_transparent.png){fig-align="center"}
+
+# Recap {data-name="Recap"}
+
+
+::: {style="font-size:60%"}
+::: columns
+::: {.column width="50%"}
+1. **The Challenge**
+    - Pre-election polls show systematic biases
+    - Need to account for house effects and time dynamics
+
+2. **Our Solution**
+    - Dynamic Linear Model tracks real-time support
+    - Fundamentals Model provides informed priors
+:::
+::: {.column width="50%"}
+
+3. **Key Features**
+    - Corrects for industry bias
+    - Smooths polls and provides grounded picture
+    - Fully capture uncertainty
+
+4. **Results**
+    - Demonstrated good accuracy
+    - Successfully captured some biases
+
+:::
+:::
+
+- We will keep working on this model and we'll be back for later elections
+:::
+
